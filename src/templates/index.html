@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ML2Viz</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+  </script>
+  <script>
+
+
+
+    function myFunction1($event) {
+      if ($event.target.selectedIndex == 4) {
+        $("#data_upload").show()
+
+      } else {
+        $("#data_upload").hide()
+
+
+      }
+    }
+
+    function myFunction2($event) {
+      if ($event.target.selectedIndex == 1) {
+        $("#model_architecture").show()
+        $("#model_path").hide()
+        $("#epochs").show()
+        $("#bs").show()
+        $("#optimizer").show()
+        $("#lr").show()
+      } else {
+        $("#model_architecture").hide()
+        $("#model_path").show()
+        $("#epochs").hide()
+        $("#bs").show()
+        $("#optimizer").hide()
+        $("#lr").hide()
+
+      }
+    }
+
+    function defaultView() {
+      $("#data_upload").hide()
+      $("#model_architecture").hide()
+      $("#model_path").hide()
+      $("#epochs").hide()
+      $("#bs").hide()
+      $("#optimizer").hide()
+      $("#lr").hide()
+
+    }
+  </script>
+</head>
+
+<body onload="defaultView()">
+  <h2>ML2Viz</h2>
+  <!--  <form action = '/' method ='post' >
+  <input type="file" name="file">
+
+  <input type="submit" value="upload"> -->
+
+  <!-- <form action="{{ url_for('predict')}}" method="post"> -->
+
+    <!-- <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
+      <label>File to stash:</label>
+      <input type="file" name="file" required />
+  </form>
+  <input type="button" id="uploadBTN" value="Stash the file!"/> -->
+  <!-- <div id="output"></div> -->
+
+
+  <form action="/predict" method="post" id = "forminfo" enctype="multipart/form-data">
+
+
+    <label for="dataset">Choose a dataset:</label>
+    <select id="dataset" name="dataset" onchange="myFunction1(event)" required>
+      <option value="" disabled hidden> Select</option>
+      <option value="cifar10">CIFAR10</option>
+      <option value="mnist">MNIST</option>
+      <option value="fmnist">Fashion MNIST</option>
+      <option value="other">Other (Your Own)</option>
+      <!-- <option value="audi">Audi</option> -->
+    </select>
+
+    <!-- Upload your own data
+
+    Stanford Dogs
+    ├── Terriers
+    │   ├── sdf.jpg
+    │   └── gag.jpg
+    └── Labradors
+        ├── BX6dKK7CUAAakzh.jpg
+        └── sffsggt.jpg
+
+   -->
+
+      <!-- <label>File to stash:</label> -->
+      
+  
+  <!-- <input type="button" id="uploadBTN" value="Stash the file!"/> -->
+  <!-- <div id="output"></div> -->
+
+    <div id='data_upload'>Choose the file:
+      <!-- <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo"> -->
+      <input type="file" name="file" />
+
+    
+    <!-- <input type="button" id="uploadBTN" value ="Upload"/> -->
+    <!-- </form> -->
+    </div>
+
+
+    <p>Please select your task:<br>
+      <input type="radio" id="classification" name="task" value="classification" checked>
+      <label for="classification">Classification</label><br>
+      <input type="radio" id="segmentation" name="task" value="segmentation">
+      <label for="segmentation">Segmentation (not in use)</label><br>
+      <input type="radio" id="detection" name="task" value="detection">
+      <label for="detection">Object Detection (not in use)</label></p>
+
+    <label for="choice">What do you want to do?:</label>
+    <select id="choice" onchange="myFunction2(event)" required>
+      <option value=""> Select</option>
+      <option value="1">Train my own model</option>
+      <option value="2">Upload trained model</option>
+    </select>
+
+    <div id="model_architecture">
+      <p>Please select model architecture:</p>
+      <input type="radio" id="fcn" name="architecture" value="fcn" checked>
+      <label for="fcn">5 layer FCN</label><br>
+      <input type="radio" id="vgg" name="architecture" value="vgg">
+      <label for="vgg">VGG16</label><br>
+      <input type="radio" id="resnet" name="architecture" value="resnet">
+      <label for="resnet">Resnet34</label>
+    </div>
+
+    <div id="model_path">
+      <p>Trained Model Path <input type="file" name="model_path"/></p>
+    </div>
+    <div id="epochs">
+      <p>Epochs: <input type="text" name="epochs" placeholder="eg. 5" /></p>
+    </div>
+    <div id="bs">
+      <p> Batch Size: <input type="number" name="bs" placeholder="eg. 100" step=100 required></p>
+    </div>
+
+    <div id="optimizer">
+      <p>Optimizer:</p>
+      <input type="radio" id="adam" name="optimizer" value="adam">
+      <label for="adam">Adam</label>
+      <input type="radio" id="SGD" name="optimizer" value="SGD" checked>
+      <label for="SGD">SGD</label><br>
+    </div>
+
+    <div id="lr">
+
+      <p> Learning Rate: <input type="number" name="lr" placeholder="eg. 0.01" step=0.001></p>
+    </div>
+    <p>Visualizations :</p>
+    <input type="checkbox" id="confusionmatrix" name="visualization" value="confusionmatrix" checked>
+    <label for="confusionmatrix">Image Confusion Matrix</label>
+    <input type="checkbox" id="3D Projector" name="visualization" value="3D Projector" checked>
+    <label for="3D Projector">3D Projector Tool</label><br>
+    <input type="checkbox" id="network" name="visualization" value="network" checked>
+    <label for="network">Network Architecture</label><br>
+    <input type="checkbox" id="imp images" name="visualization" value="img images">
+    <label for="img images">Important Images (not in use)</label>
+    <input type="checkbox" id="other" name="visualization" value="other">
+    <label for="other">Some Other Viz (not in use)</label><br>
+    <p> Number of images to visualize <input type="number" name="num" placeholder="eg. 1000" step=100 required></p>
+    <br>
+    <button type="submit" id="uploadBTN">Train and Visualize</button>
+  </form>
+
+  <a href="http://localhost:6006" target="_blank"><button type="submit">Tensorboard</button></a>
+
+  <form action="/">
+    <button type="submit">Reset</button>
+  </form>
+
+
+  {{output}}
+
+</body>
+
+</html>
